@@ -1,0 +1,17 @@
+
+.btn {
+    border-radius: 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: .85rem 3.5rem;
+}
+
+.btn-white {
+    background: white;
+    color: $blue;
+}
+
+.width-control {
+    flex: 1;
+    max-width: 120rem;
+}

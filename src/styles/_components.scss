@@ -1,0 +1,37 @@
+header {
+    background: $blue;
+    height: 9.5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    .ttile {
+        color: white;
+        font-size: 2rem;
+    }
+}
+
+footer {
+    background: $blue;
+    height: 9.5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+}

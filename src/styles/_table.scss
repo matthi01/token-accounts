@@ -1,0 +1,67 @@
+.custom-table {
+    font-size: 1.2rem;
+    table {
+        width: 100%;
+        border-spacing: 0;
+        border-radius: 5px;
+        tr td,
+        tr th {
+            padding: .5rem;
+            text-align: left;
+        }
+        thead {
+            background: $blue;
+            color: white;
+        }
+        tbody {
+            tr {
+                &:nth-child(odd) {
+                    background: white;
+                }
+            }
+        }
+    }
+    .header-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .pagination {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        button {
+            background: white;
+            color: $blue;
+            border: 1px solid grey;
+            padding: .5rem;
+            &:disabled {
+                color: grey;
+            }
+        }
+        .controls {
+            // ...
+        }
+        .page-indicator {
+            color: $blue;
+        }
+        .page-group-select {
+            background: white;
+            color: $blue;
+            border: 1px solid grey;
+            padding: .5rem;
+        }
+    }
+    .filter {
+        .label {
+            margin-right: 1rem;
+        }
+        input {
+            background: white;
+            color: $blue;
+            border: 1px solid grey;
+            padding: .5rem;
+        }
+    }
+}

@@ -1,5 +1,5 @@
 import React from "react"
-import LednLogo from "./LednLogo"
+import LednLogo from "./images/LednLogo"
 
 const Header: React.FC = () => {
     return (

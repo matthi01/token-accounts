@@ -11,7 +11,20 @@
     color: $blue;
 }
 
+.btn-blue {
+    background: $blue;
+    color: white;
+}
+
 .width-control {
     flex: 1;
     max-width: 120rem;
+    margin: 0 auto;
+}
+
+@include largeScreen {
+    .width-control {
+        max-width: 100%;
+        margin: 0 2rem;
+    }
 }

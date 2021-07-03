@@ -8,7 +8,7 @@ const App: React.FC = () => {
   return (
     <div className="app">
       <Header />
-      <main>
+      <main className="width-control">
         <Dashboard />
       </main>
       <Footer />

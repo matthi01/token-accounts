@@ -1,7 +1,6 @@
 header {
     background: $blue;
     height: 9.5rem;
-    padding: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,10 +21,10 @@ header {
 footer {
     background: $blue;
     height: 9.5rem;
-    padding: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: auto;
     .content {
         display: flex;
         align-items: center;

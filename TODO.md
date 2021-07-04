@@ -10,11 +10,11 @@ To do list:
     - UI styling for table
     - styling for pagination
     - styling for filtering
-    - styling for sorting (use font-awesome)
-- add export button
+    x - styling for sorting (use font-awesome)
+x - add export button
 x - hook up all external links
 - figure out the scrolling issue (spacing for footer still)
-- footer / footer styling
+- add footer / footer styling
 - responsiveness down to at least 375
 - types! cleanup and check all your types, make sure you have everything properly typed
 - Split up some smaller components:

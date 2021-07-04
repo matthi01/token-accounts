@@ -5,6 +5,7 @@
     font-weight: 700;
     padding: .85rem 3.5rem;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .btn-white {
@@ -17,9 +18,14 @@
     color: $light;
 }
 
+.btn-color {
+    background: $orange;
+    color: $light;
+}
+
 .width-control {
     flex: 1;
-    max-width: 120rem;
+    max-width: 115rem;
     margin: 0 auto;
 }
 
@@ -30,6 +36,6 @@
 @include largeScreen {
     .width-control {
         max-width: 100%;
-        margin: 0 2rem;
+        margin: 0 4rem;
     }
 }

@@ -14,13 +14,13 @@ const Pagination: React.FC<IPaginationProps> = (props) => {
             <div className="page-navigation">
                 <button onClick={() => props.gotoPage(0)} disabled={!props.canPreviousPage}>
                     <FontAwesomeIcon icon={faFastBackward} />
-                </button>{' '}
+                </button>{" "}
                 <button onClick={() => props.previousPage()} disabled={!props.canPreviousPage}>
                     <FontAwesomeIcon icon={faStepBackward} />
-                </button>{' '}
+                </button>{" "}
                 <button onClick={() => props.nextPage()} disabled={!props.canNextPage}>
                     <FontAwesomeIcon icon={faStepForward} />
-                </button>{' '}
+                </button>{" "}
                 <button onClick={() => props.gotoPage(props.pageCount - 1)} disabled={!props.canNextPage}>
                     <FontAwesomeIcon icon={faFastForward} />
                 </button>
@@ -28,7 +28,7 @@ const Pagination: React.FC<IPaginationProps> = (props) => {
             <span className="page-indicator">
                 <strong>
                     {props.pageIndex + 1} of {props.pageOptions.length}
-                </strong>{' '}
+                </strong>{" "}
             </span>
             <select
                 className="page-size-select"

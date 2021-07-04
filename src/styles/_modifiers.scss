@@ -4,22 +4,27 @@
     font-size: 1.2rem;
     font-weight: 700;
     padding: .85rem 3.5rem;
+    cursor: pointer;
 }
 
 .btn-white {
-    background: white;
-    color: $blue;
+    background: $light;
+    color: $darkBlue;
 }
 
 .btn-blue {
-    background: $blue;
-    color: white;
+    background: $darkBlue;
+    color: $light;
 }
 
 .width-control {
     flex: 1;
     max-width: 120rem;
     margin: 0 auto;
+}
+
+.ml-1 {
+    margin-left: 1rem;
 }
 
 @include largeScreen {

@@ -1,3 +1,8 @@
+@mixin boxShadow {
+    box-shadow: rgb(0 0 0 / 45%) 0px 0px 6px 1px;
+}
+
+// breakpoints
 @mixin largeScreen {
     @media screen and (max-width: 1200px) {
         @content;

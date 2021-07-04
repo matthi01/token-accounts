@@ -5,8 +5,8 @@ const Header: React.FC = () => {
     return (
         <header>
             <div className="width-control content">
-                <div className="title"><LednLogo /></div>
-                <div className="join btn btn-white">Join</div>
+                <a href="https://ledn.io/" target="blank" className="home"><LednLogo /></a>
+                <a href="https://platform.ledn.io/signup" target="blank" className="join btn btn-white">Join</a>
             </div>
         </header>
     )

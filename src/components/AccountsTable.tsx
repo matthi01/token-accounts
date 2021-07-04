@@ -5,15 +5,15 @@ import Table from "./Table/Table"
 import countryCodes from "../assets/countryCodes/countryCodes.json"
 
 interface IAccountDataRecord {
-    Country?: string
-    "First Name"?: string
-    "Last Name"?: string
-    "ReferencedBy"?: string
-    amt?: number
-    createdDate?: string
-    dob?: string
-    email?: string
-    mfa?: string
+    Country: string
+    "First Name": string
+    "Last Name": string
+    "ReferredBy": string | null
+    amt: number
+    createdDate: string
+    dob: string
+    email: string
+    mfa: string | null
 }
 
 interface IProps {

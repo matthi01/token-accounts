@@ -16,18 +16,13 @@ const GlobalFilter: React.FC<IGlobalFilter> = ({ preGlobalFilteredRows, globalFi
 
     return (
         <div className="filter">
-            <span className="label">Search:</span>
             <input
                 value={value || ""}
                 onChange={e => {
                     setValue(e.target.value);
                     onChange(e.target.value);
                 }}
-                placeholder={`${count} records...`}
-                style={{
-                    fontSize: '1.1rem',
-                    border: '0',
-                }}
+                placeholder={`Search ${count} records...`}
             />
         </div>
     )

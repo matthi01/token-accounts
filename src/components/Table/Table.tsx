@@ -1,6 +1,13 @@
+import { 
+    faFileExport, 
+    faSortAmountDown, 
+    faSortAmountUp
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
 import { useFilters, useGlobalFilter, usePagination, useTable, useSortBy, Column } from "react-table"
 import GlobalFilter from "./GlobalFilter"
+import Pagination from "./Pagination"
 
 interface IProps {
     columns: Column[]
@@ -56,7 +63,7 @@ const Table: React.FC<IProps> = ({columns, data}) => {
                     globalFilter={state.globalFilter}
                     setGlobalFilter={setGlobalFilter}
                 />
-                <div className="btn btn-blue">Download as CSV</div>
+                <div className="btn btn-blue">Export as CSV<FontAwesomeIcon className="ml-1" icon={faFileExport} /></div>
             </div>
             <table {...getTableProps()}>
                 <thead>
@@ -65,13 +72,13 @@ const Table: React.FC<IProps> = ({columns, data}) => {
                             {headerGroup.headers.map(column => (
                                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                                     {column.render('Header')}
-                                    {/* <span>
+                                    <span>
                                         {column.isSorted
                                         ? column.isSortedDesc
-                                            ? ' 🔽'
-                                            : ' 🔼'
+                                            ? <FontAwesomeIcon className="ml-1" icon={faSortAmountDown} />
+                                            : <FontAwesomeIcon className="ml-1" icon={faSortAmountUp} />
                                         : ''}
-                                    </span> */}
+                                    </span>
                                 </th>
                             ))}
                         </tr>
@@ -90,41 +97,19 @@ const Table: React.FC<IProps> = ({columns, data}) => {
                     })}
                 </tbody>
             </table>
-            <div className="pagination">
-                <div className="controls">
-                    <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                        {'First'}
-                    </button>{' '}
-                    <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                        {'Prev'}
-                    </button>{' '}
-                    <button onClick={() => nextPage()} disabled={!canNextPage}>
-                        {'Next'}
-                    </button>{' '}
-                    <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                        {'Last'}
-                    </button>
-                </div>
-                <span className="page-indicator">
-                    Page{' '}
-                    <strong>
-                        {state.pageIndex + 1} of {pageOptions.length}
-                    </strong>{' '}
-                </span>
-                <select
-                    className="page-group-select"
-                    value={state.pageSize}
-                    onChange={e => {
-                        setPageSize(Number(e.target.value))
-                    }}
-                >
-                    {[10, 20, 30, 40, 50].map(pageSize => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            <Pagination
+                page={page}
+                canPreviousPage={canPreviousPage}
+                canNextPage={canNextPage}
+                pageOptions={pageOptions}
+                pageCount={pageCount}
+                gotoPage={gotoPage}
+                nextPage={nextPage}
+                previousPage={previousPage}
+                setPageSize={setPageSize}
+                pageIndex={state.pageIndex}
+                pageSize={state.pageSize}
+            />
         </div>
     )
 }

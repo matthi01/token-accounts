@@ -1,5 +1,5 @@
 header {
-    background: $blue;
+    background: $darkBlue;
     height: 9.5rem;
     display: flex;
     align-items: center;
@@ -8,18 +8,18 @@ header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        color: white;
+        color: $light;
         font-size: 1.8rem;
         font-weight: 600;
-    }
-    .ttile {
-        color: white;
-        font-size: 2rem;
+        a {
+            cursor: pointer;
+            text-decoration: none;
+        }
     }
 }
 
 footer {
-    background: $blue;
+    background: $darkBlue;
     height: 9.5rem;
     display: flex;
     align-items: center;
@@ -29,7 +29,7 @@ footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        color: white;
+        color: $light;
         font-size: 1.8rem;
         font-weight: 600;
     }

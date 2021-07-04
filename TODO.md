@@ -1,6 +1,6 @@
 To do list:
 
-- build a datamodel function which will clean up the data
+- build a datamodel function which will clean up the data - come to think of it.. this should be done on the backend - leave it out of the frontend
     - this is gonna require a global store... mobx or redux?
     x - clean up nulls
     x - parse dates
@@ -11,18 +11,21 @@ To do list:
     - styling for pagination
     - styling for filtering
     - styling for sorting (use font-awesome)
-- add Download Selection button
-- hook up all links
+- add export button
+x - hook up all external links
 - figure out the scrolling issue (spacing for footer still)
-- footer styling
+- footer / footer styling
 - responsiveness down to at least 375
 - types! cleanup and check all your types, make sure you have everything properly typed
 - Split up some smaller components:
-    - split up the table sub components
-        - pagination
+    x - split up the table sub components
+        x - pagination
         x - global filter
     - split up button component
 - add tests!
-- host the data and country translations through api
+- set up API
+    - host accounts data
+    - host country codes data
 - use same font as Ledn site (https://fonts.google.com/specimen/Poppins?query=Poppins)
-- implement font-awesome
+x - implement font-awesome
+- might have misread the instructions - maybe add additional filters for MFA type and Country individually

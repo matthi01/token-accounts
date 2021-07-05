@@ -26,7 +26,6 @@ type CountryCode = keyof typeof countryCodes
 const AccountsTable: React.FC<IProps> = (props) => {
     const columns = React.useMemo(() => [
         {
-            // Header: "Accounts",
             id: "accounts",
             columns: [
                 {
@@ -87,7 +86,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
         }
     ], [])
 
-    return <Table columns={columns} data={props.data} />
+    return <Table title="Accounts" columns={columns} data={props.data} />
 }
 
 export default AccountsTable

@@ -1,12 +1,18 @@
 .custom-table {
     font-size: 1.2rem;
+    padding: 2rem;
+    background: $light;
+    @include boxShadow;
+    border-radius: 20px;
+    margin-bottom: 4rem;
+
     table {
         width: 100%;
         border-spacing: 0;
         border-radius: 5px;
         tr td,
         tr th {
-            padding: .5rem;
+            padding: 1rem .5rem;
             text-align: left;
         }
         thead {
@@ -15,8 +21,12 @@
         }
         tbody {
             tr {
-                &:nth-child(odd) {
-                    background: $light;
+                &:nth-child(even) {
+                    background: $background;
+                }
+                &:hover {
+                    background: $highlightBlue;
+                    color: $light;
                 }
             }
         }
@@ -25,7 +35,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         .filter {
             input {
                 background: $light;
@@ -46,6 +56,7 @@
         margin-top: 2rem;
         button {
             background: $light;
+            // background: $background;
             color: $darkBlue;
             border: none;
             border-radius: 50%;
@@ -79,4 +90,12 @@
         }
     }
     
+}
+
+@include largeScreen {
+    .custom-table {
+        tbody {
+            font-size: 1.1rem;
+        }
+    }
 }

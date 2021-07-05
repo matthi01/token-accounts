@@ -16,9 +16,11 @@ import { IAccountDataRecord } from "../AccountsTable/AccountsTable"
 interface IProps {
     columns: Column[]
     data: any
+    title: string
 }
 
-const Table: React.FC<IProps> = ({columns, data}) => {
+const Table: React.FC<IProps> = (props) => {
+    const { columns, data } = props
     const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), [])
 
     const {
@@ -80,6 +82,7 @@ const Table: React.FC<IProps> = ({columns, data}) => {
 
     return (
         <div className="custom-table">
+            <h3 className="mb-3">{ props.title }</h3>
             <div className="header-controls">
                 <GlobalFilter
                     preGlobalFilteredRows={preGlobalFilteredRows}

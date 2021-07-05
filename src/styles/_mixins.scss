@@ -1,5 +1,5 @@
 @mixin boxShadow {
-    box-shadow: rgb(0 0 0 / 45%) 0px 0px 6px 1px;
+    box-shadow: rgba(0, 0, 0, .45) 0px 0px 6px 1px;
 }
 
 // breakpoints

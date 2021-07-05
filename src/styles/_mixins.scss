@@ -16,12 +16,18 @@
 }
 
 @mixin smallScreen {
-    @media screen and (max-width: 480px) {
+    @media screen and (max-width: 700px) {
         @content;
     }
 }
 
 @mixin mobileScreen {
+    @media screen and (max-width: 480px) {
+        @content;
+    }
+}
+
+@mixin smallMobileScreen {
     @media screen and (max-width: 375px) {
         @content;
     }

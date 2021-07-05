@@ -1,4 +1,4 @@
-.custom-table {
+.table-container {
     font-size: 1.2rem;
     padding: 2rem;
     background: $light;
@@ -31,13 +31,51 @@
             }
         }
     }
+    .compact-table {
+        .tr {
+            margin: 4rem 0;
+            &:nth-child(even) {
+                background: $background;
+            }
+            &:first-child {
+                margin-top: 0;
+            }
+            &:last-child {
+                margin-bottom: 0;
+            }
+            .td {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                &:hover {
+                    background: $highlightBlue;
+                    div {
+                        color: $light;
+                    }
+                }
+                .cell {
+                    padding: .5rem 1rem;
+                    flex: 1;
+                }
+                .header {
+                    color: $grey;
+                    font-size: 1.5rem;
+                }
+                .value {
+                    color: $darkBlue;
+                    font-size: 1.6rem;
+                }
+            }
+        }
+    }
     .header-controls {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 2rem;
-        .filter {
+        .search {
             input {
+                font-size: 1.4rem;
                 background: $light;
                 color: $darkBlue;
                 padding: 0 1.5rem;
@@ -92,10 +130,63 @@
     
 }
 
+// 1200px
 @include largeScreen {
-    .custom-table {
+    .table-container {
         tbody {
             font-size: 1.1rem;
+        }
+    }
+}
+
+// 700px
+@include smallScreen {
+    .compact-table {
+        .tr .td {
+            .value {
+                text-align: right;
+            }
+        }
+    }
+}
+
+// 480px
+@include mobileScreen {
+    .table-container {
+        .compact-table {
+            .tr .td {
+                .header,
+                .value {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+        .header-controls {
+            flex-direction: column-reverse;
+            .search {
+                width: 100%;
+                input {
+                    width: 100%;
+                }
+            }
+            .export-btn {
+                margin-bottom: 2rem;
+            }
+        }
+        .pagination {
+            flex-direction: column;;
+            .page-navigation {
+                order: 2;
+            }
+            .page-indicator {
+                order: 1;
+                margin-bottom: 2rem;
+            }
+            .page-size-select {
+                order: 3;
+                margin-left: 0;
+                margin-top: 1rem;
+            }
         }
     }
 }

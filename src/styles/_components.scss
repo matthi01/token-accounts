@@ -1,19 +1,5 @@
-header {
-    background: $darkBlue;
-    height: 9.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .content {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        color: $light;
-        font-size: 1.8rem;
-        font-weight: 600;
-    }
-}
-
+// header / footer
+header,
 footer {
     background: $darkBlue;
     height: 9.5rem;
@@ -28,5 +14,50 @@ footer {
         color: $light;
         font-size: 1.8rem;
         font-weight: 600;
+        .ledn-logo {
+            width: 9rem;
+        }
+    }
+}
+
+// buttons
+.btn {
+    border-radius: 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: .85rem 3.5rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-white {
+    background: $light;
+    color: $darkBlue;
+}
+.btn-color {
+    background: $orange;
+    color: $light;
+}
+.btn-transparent {
+    background: transparent;
+    border: 1px solid $light;
+    color: $light;
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+// 480px
+@include mobileScreen {
+    header,
+    footer {
+        .content {
+            .ledn-logo {
+                width: 7rem;
+            }
+        }
+    }
+
+    .btn {
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
     }
 }

@@ -1,7 +1,7 @@
 import React from "react"
 
 const LednLogo: React.FC = () => (
-    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 330.6 127.6" xmlSpace="preserve" width="90">
+    <svg className="ledn-logo" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 330.6 127.6" xmlSpace="preserve">
         <style>
             {`.st0 {fill:#fff}`}
         </style>

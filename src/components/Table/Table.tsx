@@ -10,8 +10,9 @@ import GlobalFilter from "./GlobalFilter"
 import Pagination from "./Pagination"
 import { CSVLink } from "react-csv"
 import { headerLabels } from "../AccountsTable/constants"
-import moment from "moment"
+// import moment from "moment"
 import { IAccountDataRecord } from "../AccountsTable/AccountsTable"
+import { useMediaQuery } from "react-responsive"
 
 interface IProps {
     columns: Column[]
@@ -21,6 +22,7 @@ interface IProps {
 
 const Table: React.FC<IProps> = (props) => {
     const { columns, data } = props
+    const compact = useMediaQuery({ query: '(max-width: 960px)' })
     const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), [])
 
     const {
@@ -64,8 +66,9 @@ const Table: React.FC<IProps> = (props) => {
     // oh damn... this is the table component.. none of this logic should be in here!
     const csvData = rows.map(record => {
         const row = record.original as IAccountDataRecord
-        row.dob = moment(row.dob).format("L")
-        row.createdDate = moment(row.dob).format("L")
+        // giving deprecation warning
+        // row.dob = moment(row.dob).format("L")
+        // row.createdDate = moment(row.dob).format("L")
         return row
     })
     const headers = [
@@ -81,7 +84,7 @@ const Table: React.FC<IProps> = (props) => {
     ]
 
     return (
-        <div className="custom-table">
+        <div className="table-container">
             <h3 className="mb-3">{ props.title }</h3>
             <div className="header-controls">
                 <GlobalFilter
@@ -93,51 +96,82 @@ const Table: React.FC<IProps> = (props) => {
                     data={csvData} 
                     filename="lednTokenAccounts.csv" 
                     headers={headers}
-                    className="btn btn-color"
+                    className="export-btn btn btn-color"
                 >
-                    Export CSV<FontAwesomeIcon className="ml-1" icon={faFileExport} />
+                    Export<FontAwesomeIcon className="ml-1" icon={faFileExport} />
                 </CSVLink>
             </div>
-            <table {...getTableProps()}>
-                <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr { ...headerGroup.getHeaderGroupProps() }>
-                            { 
-                                headerGroup.headers.map(column => (
-                                    column.Header 
-                                        ?   <th { ...column.getHeaderProps(column.getSortByToggleProps()) }>
-                                                { column.render("Header") }
-                                                <span>
-                                                    {
-                                                        column.isSorted
-                                                            ? column.isSortedDesc
-                                                                ? <FontAwesomeIcon className="ml-1" icon={faSortAmountDown} />
-                                                                : <FontAwesomeIcon className="ml-1" icon={faSortAmountUp} />
-                                                            : ""
-                                                    }
-                                                </span>
-                                            </th>
-                                        :   null 
-                                ))
+            {
+                compact 
+                    ? <div className="compact-table" { ...getTableBodyProps() }>
+                        {
+                            page.map((row, i) => {
+                                prepareRow(row)
+                                return (
+                                    <div className="tr" { ...row.getRowProps() }>
+                                        {
+                                            row.cells.map(cell => {
+                                                return (
+                                                    <div className="td" {...cell.getCellProps() }>
+                                                        <div className="cell header">
+                                                            { cell.render("Header") }
+                                                        </div>
+                                                        <div className="cell value">
+                                                            { cell.render("Cell") }
+                                                        </div>
+                                                    </ div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                )
+                            })
+                        }
+                        
+                    </div>
+                    : <table { ...getTableProps() }>
+                        <thead>
+                            {headerGroups.map(headerGroup => (
+                                <tr { ...headerGroup.getHeaderGroupProps() }>
+                                    { 
+                                        headerGroup.headers.map(column => (
+                                            column.Header 
+                                                ?   <th { ...column.getHeaderProps(column.getSortByToggleProps()) }>
+                                                        { column.render("Header") }
+                                                        <span>
+                                                            {
+                                                                column.isSorted
+                                                                    ? column.isSortedDesc
+                                                                        ? <FontAwesomeIcon className="ml-1" icon={faSortAmountDown} />
+                                                                        : <FontAwesomeIcon className="ml-1" icon={faSortAmountUp} />
+                                                                    : ""
+                                                            }
+                                                        </span>
+                                                    </th>
+                                                :   null 
+                                        ))
+                                    }
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody { ...getTableBodyProps() }>
+                            {
+                                page.map((row, i) => {
+                                    prepareRow(row)
+                                    return (
+                                        <tr { ...row.getRowProps() }>
+                                            {
+                                                row.cells.map(cell => (
+                                                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                                ))
+                                            }
+                                        </tr>
+                                    )
+                                })
                             }
-                        </tr>
-                    ))}
-                </thead>
-                <tbody { ...getTableBodyProps() }>
-                    {page.map((row, i) => {
-                        prepareRow(row)
-                        return (
-                            <tr { ...row.getRowProps() }>
-                                {
-                                    row.cells.map(cell => {
-                                        return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                    })
-                                }
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+            }
             <Pagination
                 page={page}
                 canPreviousPage={canPreviousPage}

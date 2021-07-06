@@ -1,11 +1,12 @@
 import moment from "moment"
 import React from "react"
 import { isNull } from "../../helpers/helpers"
-import Table from "../Table/Table"
+import Table, { IDataRecord } from "../Table/Table"
 import countryCodes from "../../assets/countryCodes/countryCodes.json"
 import { headerLabels } from "./constants"
+import { Row } from "react-table"
 
-export interface IAccountDataRecord {
+export interface IAccountDataRecord extends IDataRecord {
     Country: string
     "First Name": string
     "Last Name": string
@@ -86,7 +87,34 @@ const AccountsTable: React.FC<IProps> = (props) => {
         }
     ], [])
 
-    return <Table title="Accounts" columns={columns} data={props.data} />
+    const headers = [
+        { label: headerLabels["Country"], key: "Country" },
+        { label: headerLabels["First Name"], key: "First Name" },
+        { label: headerLabels["Last Name"], key: "Last Name" },
+        { label: headerLabels["ReferredBy"], key: "ReferredBy" },
+        { label: headerLabels["amt"], key: "amt" },
+        { label: headerLabels["createdDate"], key: "createdDate" },
+        { label: headerLabels["dob"], key: "dob" },
+        { label: headerLabels["email"], key: "email" },
+        { label: headerLabels["mfa"], key: "mfa" }
+    ]
+
+    const accountDataFormatting = (rows: Row<{}>[]) => {
+        return rows.map(record => {
+            const row = record.original as IAccountDataRecord
+            row.dob = moment(row.dob).format("L")
+            row.createdDate = moment(row.createdDate).format("L")
+            return row
+        })
+    }
+
+    const exportConfig = {
+        fileName: "accounts.csv",
+        headers: headers,
+        dataFormattingCallback: accountDataFormatting
+    }
+
+    return <Table title="Accounts" columns={columns} data={props.data} exportConfig={exportConfig}/>
 }
 
 export default AccountsTable

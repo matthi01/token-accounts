@@ -4,7 +4,7 @@
     background: $light;
     @include boxShadow;
     border-radius: 20px;
-    margin-bottom: 4rem;
+    margin: 6rem 0;
 
     table {
         width: 100%;
@@ -94,7 +94,6 @@
         margin-top: 2rem;
         button {
             background: $light;
-            // background: $background;
             color: $darkBlue;
             border: none;
             border-radius: 50%;

@@ -5,19 +5,30 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
-import { useFilters, useGlobalFilter, usePagination, useTable, useSortBy, Column } from "react-table"
+import { useFilters, useGlobalFilter, usePagination, useTable, useSortBy, Column, Row } from "react-table"
 import GlobalFilter from "./GlobalFilter"
 import Pagination from "./Pagination"
 import { CSVLink } from "react-csv"
-import { headerLabels } from "../AccountsTable/constants"
-// import moment from "moment"
-import { IAccountDataRecord } from "../AccountsTable/AccountsTable"
 import { useMediaQuery } from "react-responsive"
+
+export interface IDataRecord {
+    [key: string]: string | number | null
+}
+
+interface IExportConfig {
+    fileName: string
+    headers: {
+        key: string,
+        label: string
+    }[]
+    dataFormattingCallback: (rows: Row<{}>[]) => IDataRecord[]
+}
 
 interface IProps {
     columns: Column[]
     data: any
     title: string
+    exportConfig: IExportConfig
 }
 
 const Table: React.FC<IProps> = (props) => {
@@ -26,6 +37,7 @@ const Table: React.FC<IProps> = (props) => {
     const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), [])
 
     const {
+        // table
         getTableProps,
         getTableBodyProps,
         headerGroups,
@@ -45,7 +57,6 @@ const Table: React.FC<IProps> = (props) => {
         state,
 
         // filtering
-        // visibleColumns,
         preGlobalFilteredRows,
         setGlobalFilter,
     } = useTable(
@@ -61,27 +72,7 @@ const Table: React.FC<IProps> = (props) => {
         usePagination
     )
 
-    // write a data model function which handles making these data changes 
-    // (doing it in both the CSV and the table right now)
-    // oh damn... this is the table component.. none of this logic should be in here!
-    const csvData = rows.map(record => {
-        const row = record.original as IAccountDataRecord
-        // giving deprecation warning
-        // row.dob = moment(row.dob).format("L")
-        // row.createdDate = moment(row.dob).format("L")
-        return row
-    })
-    const headers = [
-        { label: headerLabels["Country"], key: "Country" },
-        { label: headerLabels["First Name"], key: "First Name" },
-        { label: headerLabels["Last Name"], key: "Last Name" },
-        { label: headerLabels["ReferredBy"], key: "ReferredBy" },
-        { label: headerLabels["amt"], key: "amt" },
-        { label: headerLabels["createdDate"], key: "createdDate" },
-        { label: headerLabels["dob"], key: "dob" },
-        { label: headerLabels["email"], key: "email" },
-        { label: headerLabels["mfa"], key: "mfa" }
-    ]
+    const csvData = props.exportConfig.dataFormattingCallback(rows)
 
     return (
         <div className="table-container">
@@ -94,11 +85,11 @@ const Table: React.FC<IProps> = (props) => {
                 />
                 <CSVLink 
                     data={csvData} 
-                    filename="lednTokenAccounts.csv" 
-                    headers={headers}
+                    filename={props.exportConfig.fileName} 
+                    headers={props.exportConfig.headers}
                     className="export-btn btn btn-color"
                 >
-                    Export<FontAwesomeIcon className="ml-1" icon={faFileExport} />
+                    Export<FontAwesomeIcon className="ml-1" icon={ faFileExport } />
                 </CSVLink>
             </div>
             {

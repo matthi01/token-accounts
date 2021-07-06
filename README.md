@@ -4,16 +4,17 @@ This project sets up a display dashboard for a fictional Ledn token.
 
 ## Features:
 
+- Responsiveness down to 375px
 - Responsive table design
 - Selection export to CSV
 - Table filtering
-- Sorting
+- Table Sorting
 
 ### Tech:
 
 - React
 - Typescript
-- React-table v7
+- react-table v7
 
 
 ## Running the project:

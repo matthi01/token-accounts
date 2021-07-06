@@ -2,6 +2,14 @@
     box-shadow: rgba(0, 0, 0, .45) 0px 0px 6px 1px;
 }
 
+@mixin desktopClipPath {
+    clip-path: polygon(0px 0px, 100% 0px, 100% 100%, 0px 80%);
+}
+
+@mixin mobileClipPath {
+    clip-path: polygon(0px 0px, 100% 0px, 100% 100%, 0px 90%);
+}
+
 // breakpoints
 @mixin largeScreen {
     @media screen and (max-width: 1200px) {

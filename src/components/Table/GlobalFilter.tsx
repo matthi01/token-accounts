@@ -3,8 +3,7 @@ import { useAsyncDebounce, UseGlobalFiltersInstanceProps, UseGlobalFiltersState 
 
 interface IGlobalFilterProps extends Partial<UseGlobalFiltersInstanceProps<any>>, UseGlobalFiltersState<any> {}
 
-const GlobalFilter: React.FC<IGlobalFilterProps> = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
-    const count = preGlobalFilteredRows?.length
+const GlobalFilter: React.FC<IGlobalFilterProps> = ({ globalFilter, setGlobalFilter }) => {
     const [value, setValue] = useState(globalFilter)
     const onChange = useAsyncDebounce(value => {
         setGlobalFilter && setGlobalFilter(value || undefined)
@@ -18,7 +17,7 @@ const GlobalFilter: React.FC<IGlobalFilterProps> = ({ preGlobalFilteredRows, glo
                     setValue(e.target.value);
                     onChange(e.target.value);
                 }}
-                placeholder={`Search ${count} records...`}
+                placeholder={`Search...`}
             />
         </div>
     )

@@ -15,22 +15,17 @@ This project sets up a display dashboard for a fictional Ledn token.
 - React
 - Typescript
 - react-table v7
-- Node
 
 
 ## Running the project:
 
-### Set up .env files
+### Set up .env file
 
-An .env.example file has been provided for both Client and Server. Create a .env file in the same directory as the .env.example file. Copy the contents of .env.example into .env. Do this for both Client and Server directories.
+An .env.example file has been provided. Create a .env file in the same directory as the .env.example file. Copy the contents of .env.example into .env.
 
 ### `npm install`
 
 Installs necessary dependencies of the project.
-
-### `npm run install-dependencies`
-
-Installs necessary dependencies of the Server and the Client.
 
 ### `npm start`
 

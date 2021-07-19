@@ -1,10 +1,13 @@
 import moment from "moment"
-import React from "react"
+import React, { useState } from "react"
 import { isNull } from "../../helpers/helpers"
 import Table, { IDataRecord } from "../Table/Table"
 import countryCodes from "../../assets/countryCodes/countryCodes.json"
 import { headerLabels } from "./constants"
 import { Row } from "react-table"
+import axios from "axios"
+import { useEffect } from "react"
+import ConditionalRender from "../ConditionalRender"
 
 export interface IAccountDataRecord extends IDataRecord {
     Country: string
@@ -19,12 +22,27 @@ export interface IAccountDataRecord extends IDataRecord {
 }
 
 interface IProps {
-    data: IAccountDataRecord[]
+    // data: IAccountDataRecord[]
 }
 
 type CountryCode = keyof typeof countryCodes
 
+const getAccounts = async (url: string) => {
+    const data = await axios.get(url)
+    return data
+}
+
 const AccountsTable: React.FC<IProps> = (props) => {
+    const [accountsData, setAccountsData] = useState([])
+
+    useEffect(() => {
+        getAccounts(`${process.env.REACT_APP_API_HOST}/api/accounts`)
+            .then(res => {
+                setAccountsData(res.data)
+            })
+            .catch(err => console.error("Error fetching accounts data:", err))
+    }, [])
+
     const columns = React.useMemo(() => [
         {
             id: "accounts",
@@ -114,7 +132,11 @@ const AccountsTable: React.FC<IProps> = (props) => {
         dataFormattingCallback: accountDataFormatting
     }
 
-    return <Table title="Accounts" columns={columns} data={props.data} exportConfig={exportConfig}/>
+    return (
+        <ConditionalRender render={accountsData.length > 0}>
+            <Table title="Accounts" columns={columns} data={accountsData} exportConfig={exportConfig}/>
+        </ConditionalRender>
+    )
 }
 
 export default AccountsTable

@@ -3,11 +3,11 @@ interface ILabels {
 }
 
 export const headerLabels: ILabels = {
-    Country: "Country",
-    "First Name": "First Name",
-    "Last Name": "Last Name",
-    ReferredBy: "ReferredBy",
-    amt: "Amount",
+    country: "Country",
+    firstName: "First Name",
+    lastName: "Last Name",
+    referredBy: "ReferredBy",
+    amount: "Amount",
     createdDate: "Created Date",
     dob: "Date of Birth",
     email: "Email",

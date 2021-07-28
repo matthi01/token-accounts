@@ -1,7 +1,8 @@
 require("dotenv").config()
+require("./src/db/mongoose")
+const Account = require("./src/models/account")
 
 const express = require("express")
-const accountsData = require("./resources/data/accounts.json")
 
 const PORT = process.env.SERVER_PORT || 3000
 
@@ -14,7 +15,13 @@ app.use(function(req, res, next) {
 })
 
 app.get("/api/accounts", (req, res) => {
-    res.json(accountsData)
+    Account.find({})
+        .then(users => {
+            res.send(users)
+        })
+        .catch(error => {
+            res.status(500).send()
+        })
 })
 
 app.listen(PORT, () => {

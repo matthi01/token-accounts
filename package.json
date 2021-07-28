@@ -23,5 +23,8 @@
   "homepage": "https://github.com/matthi01/token-accounts#readme",
   "devDependencies": {
     "concurrently": "^6.2.0"
+  },
+  "dependencies": {
+    "mongoose": "^5.13.3"
   }
 }

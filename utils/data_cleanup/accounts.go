@@ -1,10 +1,16 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
+	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type accountOriginal struct {
@@ -19,14 +25,14 @@ type accountOriginal struct {
 }
 
 type accountNew struct {
-	FirstName  string `json:"firstName"`
-	LastName   string `json:"lastName"`
-	Country    string `json:"country"`
-	Email      string `json:"email"`
-	DOB        string `json:"dob"`
-	MFA        string `json:"mfa"`
-	Amount     int    `json:"amount"`
-	ReferredBy string `json:"referredBy"`
+	FirstName  string `bson:"firstName"`
+	LastName   string `bson:"lastName"`
+	Country    string `bson:"country"`
+	Email      string `bson:"email"`
+	DOB        string `bson:"dob"`
+	MFA        string `bson:"mfa"`
+	Amount     int    `bson:"amount"`
+	ReferredBy string `bson:"referredBy"`
 }
 
 func main() {
@@ -64,15 +70,27 @@ func main() {
 		accounts = append(accounts, account)
 	}
 
-	// marshal new account data to json
-	accountsJson, err := json.Marshal(accounts)
+	// set up database connection
+	// todo: connectino url should come from env variables
+	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017/ledn_dashboard"))
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
-
-	// write to new accounts.json file
-	err = ioutil.WriteFile("accounts.json", accountsJson, 0644)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	err = client.Connect(ctx)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
+	}
+	defer client.Disconnect(ctx)
+
+	lednDashboardDB := client.Database("ledn_dashboard")
+	accountsCollection := lednDashboardDB.Collection("accounts")
+
+	// insert documents into the accounts collection
+	for _, account := range accounts {
+		_, err := accountsCollection.InsertOne(ctx, account)
+		if err != nil {
+			fmt.Println("Insert Error:", err)
+		}
 	}
 }

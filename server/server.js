@@ -1,21 +1,20 @@
 require("dotenv").config()
+require("./src/db/mongoose")
 
 const express = require("express")
-const accountsData = require("./resources/data/accounts.json")
+const accountRouter = require("./src/routers/accountRouter")
 
 const PORT = process.env.SERVER_PORT || 3000
 
 const app = express()
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next()
 })
 
-app.get("/api/accounts", (req, res) => {
-    res.json(accountsData)
-})
+app.use(accountRouter)
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)

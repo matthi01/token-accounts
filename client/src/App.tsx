@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import Dashboard from "./Dashboard";
+import Dashboard from "./components/Dashboard";
 import "./styles/styles.scss"
 
 const App: React.FC = () => {

@@ -71,7 +71,9 @@ func main() {
 	}
 
 	// set up database connection
-	// todo: connectino url should come from env variables
+	// todo: connectino url should probably come from env variable...
+	// shit... that would be a third env file, maybe keep this script with the server files to avoid
+	// configuration duplication
 	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017/ledn_dashboard"))
 	if err != nil {
 		log.Fatal(err)

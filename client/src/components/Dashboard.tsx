@@ -1,6 +1,6 @@
 import React from "react"
-import AccountsTable from "./components/AccountsTable/AccountsTable"
-import InfoBlock from "./components/InfoBlock"
+import AccountsTable from "./AccountsTable/AccountsTable"
+import InfoBlock from "./InfoBlock"
 
 const Dashboard: React.FC = () => {
     return (

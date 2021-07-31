@@ -87,46 +87,46 @@
             }
         }
     }
-    .pagination {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 2rem;
-        button {
-            background: $light;
-            color: $darkBlue;
-            border: none;
-            border-radius: 50%;
-            height: 3rem;
-            width: 3rem;
-            cursor: pointer;
-            &:disabled {
-                color: $grey;
-                cursor: initial;
-            }
-        }
-        .page-navigation {
-            width: 14rem;
-            display: flex;
-            justify-content: space-between;
-        }
-        .page-indicator {
-            color: $darkBlue;
-        }
-        .page-size-select {
-            background: $light;
-            color: $darkBlue;
-            border: none;
-            border-radius: 5px;
-            height: 3rem;
-            outline: none;
-            padding: 0 1.5rem;
-            width: 12rem;
-            margin-left: 2rem;
-            cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    button {
+        background: $light;
+        color: $darkBlue;
+        border: none;
+        border-radius: 50%;
+        height: 3rem;
+        width: 3rem;
+        cursor: pointer;
+        &:disabled {
+            color: $grey;
+            cursor: initial;
         }
     }
-    
+    .page-navigation {
+        width: 14rem;
+        display: flex;
+        justify-content: space-between;
+    }
+    .page-indicator {
+        color: $darkBlue;
+    }
+    .page-size-select {
+        background: $light;
+        color: $darkBlue;
+        border: none;
+        border-radius: 5px;
+        height: 3rem;
+        outline: none;
+        padding: 0 1.5rem;
+        width: 12rem;
+        margin-left: 2rem;
+        cursor: pointer;
+    }
 }
 
 // 1200px

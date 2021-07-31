@@ -5,9 +5,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
-import { useFilters, useGlobalFilter, usePagination, useTable, useSortBy, Column, Row } from "react-table"
+import { useFilters, useGlobalFilter, useTable, useSortBy, Column, Row } from "react-table"
 import GlobalFilter from "./GlobalFilter"
-import Pagination from "./Pagination"
 import { CSVLink } from "react-csv"
 import { useMediaQuery } from "react-responsive"
 
@@ -43,17 +42,6 @@ const Table: React.FC<IProps> = (props) => {
         headerGroups,
         prepareRow,
         rows,
-
-        // pagination
-        page,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        pageCount,
-        gotoPage,
-        nextPage,
-        previousPage,
-        setPageSize,
         state,
 
         // filtering
@@ -68,8 +56,7 @@ const Table: React.FC<IProps> = (props) => {
         },
         useFilters,
         useGlobalFilter,
-        useSortBy,
-        usePagination
+        useSortBy
     )
 
     const csvData = props.exportConfig.dataFormattingCallback(rows)
@@ -96,7 +83,7 @@ const Table: React.FC<IProps> = (props) => {
                 compact 
                     ? <div className="compact-table" { ...getTableBodyProps() }>
                         {
-                            page.map((row, i) => {
+                            rows.map((row, i) => {
                                 prepareRow(row)
                                 return (
                                     <div className="tr" { ...row.getRowProps() }>
@@ -147,7 +134,7 @@ const Table: React.FC<IProps> = (props) => {
                         </thead>
                         <tbody { ...getTableBodyProps() }>
                             {
-                                page.map((row, i) => {
+                                rows.map((row, i) => {
                                     prepareRow(row)
                                     return (
                                         <tr { ...row.getRowProps() }>
@@ -163,19 +150,6 @@ const Table: React.FC<IProps> = (props) => {
                         </tbody>
                     </table>
             }
-            <Pagination
-                page={page}
-                canPreviousPage={canPreviousPage}
-                canNextPage={canNextPage}
-                pageOptions={pageOptions}
-                pageCount={pageCount}
-                gotoPage={gotoPage}
-                nextPage={nextPage}
-                previousPage={previousPage}
-                setPageSize={setPageSize}
-                pageIndex={state.pageIndex}
-                pageSize={state.pageSize}
-            />
         </div>
     )
 }

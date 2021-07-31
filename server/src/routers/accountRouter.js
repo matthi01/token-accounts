@@ -38,16 +38,30 @@ router.get("/api/accounts", (req, res) => {
         }
     }
 
-    Account.find(query)
-        .sort(sort)
-        .skip(skip)
-        .limit(limit)
-            .then(users => {
-                res.send(users)
-            })
-            .catch(error => {
-                res.status(500).send(error)
-            })
+    getAccountsHandler(query, sort, skip, limit)
+        .then(accounts => {
+            res.send(accounts)
+        })
+        .catch(err => {
+            res.status(500).send(err)
+        })
 })
+
+const getAccountsHandler = async (query, sort, skip, limit) => {
+    try {
+        let totalRecords = await Account.find(query).countDocuments()
+        let accounts = await Account.find(query)
+            .sort(sort)
+            .skip(skip)
+            .limit(limit)
+
+        return {
+            totalRecords,
+            accounts
+        }
+    } catch (err) {
+        throw new Error("Error querying accounts collection. Error:", err)
+    }
+}
 
 module.exports = router

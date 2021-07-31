@@ -1,4 +1,4 @@
-# Ledn Token Dashboard
+# Ledn Token Dashboard Client App
 
 This project sets up a display dashboard for a fictional Ledn token.
 

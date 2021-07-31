@@ -1,21 +1,17 @@
-# Ledn Token Dashboard
+# Ledn Token Dashboard Server
 
-This project sets up a display dashboard for a fictional Ledn token.
+NodeJS REST API to serve up accounts data for the Ledn accounts dashboard.
 
 ## Features:
 
-- Responsiveness down to 375px
-- Responsive table design
-- Selection export to CSV
-- Table filtering
-- Table Sorting
+- MongoDB database storage
+- Supports server side pagination, sorting, and filtering
 
 ### Tech:
 
-- React
-- Typescript
-- react-table v7
-
+- NodeJS
+- MongoDB
+- Go v1.16
 
 ## Running the project:
 
@@ -23,11 +19,21 @@ This project sets up a display dashboard for a fictional Ledn token.
 
 An .env.example file has been provided. Create a .env file in the same directory as the .env.example file. Copy the contents of .env.example into .env.
 
+### Setting up and populating database
+
+Ensure you have a local running instance of mongoDB.
+
+At the root of the project, in the data directory, compile and run the accounts.go script. This script will:
+
+- read the accounts.json file provided
+- clean up the json
+- create a ledn_dashboard database
+- populate an accounts collection within ledn_dashboard
+
 ### `npm install`
 
 Installs necessary dependencies of the project.
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
+Runs the server on default port 3000.

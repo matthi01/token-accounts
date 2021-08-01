@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
-import { useFilters, useGlobalFilter, useTable, useSortBy, Column, Row } from "react-table"
+import { useFilters, useGlobalFilter, useTable, Column, Row } from "react-table"
 import GlobalFilter from "./GlobalFilter"
 import { CSVLink } from "react-csv"
 import { useMediaQuery } from "react-responsive"
@@ -28,12 +28,20 @@ interface IProps {
     data: any
     title: string
     exportConfig: IExportConfig
+
+    sortBy?: string
+    setSortBy: (value: string) => void
+
+    sortOrder?: string
+    setSortOrder: (value: string) => void
 }
 
 const Table: React.FC<IProps> = (props) => {
     const { columns, data } = props
     const compact = useMediaQuery({ query: '(max-width: 960px)' })
     const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), [])
+
+    const isSortedDesc = props.sortOrder === "desc"
 
     const {
         // table
@@ -55,11 +63,26 @@ const Table: React.FC<IProps> = (props) => {
             defaultColumn
         },
         useFilters,
-        useGlobalFilter,
-        useSortBy
+        useGlobalFilter
     )
 
     const csvData = props.exportConfig.dataFormattingCallback(rows)
+
+    const columnHeaderClickHandler = (columnId: string) => {
+        // same column clicked
+        // this would be perfect for a reducer
+        if (props.sortBy && props.sortBy === columnId) {
+            if (props.sortOrder === "desc") {
+                props.setSortBy("")
+                props.setSortOrder("")
+            } else {
+                props.setSortOrder("desc")
+            }
+        } else {
+            props.setSortBy(columnId)
+            props.setSortOrder("asc")
+        }
+    }
 
     return (
         <div className="table-container">
@@ -112,14 +135,15 @@ const Table: React.FC<IProps> = (props) => {
                             {headerGroups.map(headerGroup => (
                                 <tr { ...headerGroup.getHeaderGroupProps() }>
                                     { 
-                                        headerGroup.headers.map(column => (
-                                            column.Header 
-                                                ?   <th { ...column.getHeaderProps(column.getSortByToggleProps()) }>
+                                        headerGroup.headers.map(column => {
+                                            return (
+                                                column.Header 
+                                                ?   <th key={column.id} onClick={() => columnHeaderClickHandler(column.id)}>
                                                         { column.render("Header") }
                                                         <span>
                                                             {
-                                                                column.isSorted
-                                                                    ? column.isSortedDesc
+                                                                props.sortBy === column.id
+                                                                    ? isSortedDesc
                                                                         ? <FontAwesomeIcon className="ml-1" icon={faSortAmountDown} />
                                                                         : <FontAwesomeIcon className="ml-1" icon={faSortAmountUp} />
                                                                     : ""
@@ -127,7 +151,8 @@ const Table: React.FC<IProps> = (props) => {
                                                         </span>
                                                     </th>
                                                 :   null 
-                                        ))
+                                            )
+                                        })
                                     }
                                 </tr>
                             ))}

@@ -33,21 +33,27 @@ const getAccounts = async (url: string) => {
 }
 
 const AccountsTable: React.FC<IProps> = (props) => {
-    const [accountsData, setAccountsData] = useState([])
-    const [pageIndex, setPageIndex] = useState(0)
-    const [pageSize, setPageSize] = useState(10)
-    const [totalRecords, setTotalRecords] = useState(0)
+    const [accountsData, setAccountsData] = useState<IAccountDataRecord[]>([])
+    const [pageIndex, setPageIndex] = useState<number>(0)
+    const [pageSize, setPageSize] = useState<number>(10)
+    const [totalRecords, setTotalRecords] = useState<number>(0)
+
+    const [sortBy, setSortBy] = useState<string>()
+    const [sortOrder, setSortOrder] = useState<string>()
 
     useEffect(() => {
         const skip = pageIndex * pageSize
-        const query = `?skip=${skip}&limit=${pageSize}`
+        const limit = pageSize
+        const sort = sortBy ? `${sortBy}:${sortOrder}` : ""
+        const query = `?skip=${skip}&limit=${limit}&sort=${sort}`
+
         getAccounts(`${process.env.REACT_APP_API_HOST}/api/accounts${query}`)
             .then(res => {
                 setAccountsData(res.data.accounts)
                 setTotalRecords(res.data.totalRecords)
             })
             .catch(err => console.error("Error fetching accounts data:", err))
-    }, [pageIndex, pageSize])
+    }, [pageIndex, pageSize, sortBy, sortOrder])
 
     const columns = React.useMemo(() => [
         {
@@ -143,6 +149,11 @@ const AccountsTable: React.FC<IProps> = (props) => {
                 columns={columns}
                 data={accountsData}
                 exportConfig={exportConfig}
+
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
             />
             <Pagination
                 pageIndex={pageIndex}

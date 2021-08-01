@@ -8,6 +8,10 @@ import axios from "axios"
 import { useEffect } from "react"
 import ConditionalRender from "../ConditionalRender"
 import Pagination from "../Table/Pagination"
+import GlobalFilter from "../Table/GlobalFilter"
+import { CSVLink } from "react-csv"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 
 export interface IAccountDataRecord extends IDataRecord {
     country: string
@@ -34,18 +38,21 @@ const getAccounts = async (url: string) => {
 
 const AccountsTable: React.FC<IProps> = (props) => {
     const [accountsData, setAccountsData] = useState<IAccountDataRecord[]>([])
+
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(10)
     const [totalRecords, setTotalRecords] = useState<number>(0)
 
-    const [sortBy, setSortBy] = useState<string>()
-    const [sortOrder, setSortOrder] = useState<string>()
+    const [sortBy, setSortBy] = useState<string>("")
+    const [sortOrder, setSortOrder] = useState<string>("")
+
+    const [filter, setFilter] = useState<string>("")
 
     useEffect(() => {
         const skip = pageIndex * pageSize
         const limit = pageSize
         const sort = sortBy ? `${sortBy}:${sortOrder}` : ""
-        const query = `?skip=${skip}&limit=${limit}&sort=${sort}`
+        const query = `?skip=${skip}&limit=${limit}&sort=${sort}&filter=${filter}`
 
         getAccounts(`${process.env.REACT_APP_API_HOST}/api/accounts${query}`)
             .then(res => {
@@ -53,7 +60,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
                 setTotalRecords(res.data.totalRecords)
             })
             .catch(err => console.error("Error fetching accounts data:", err))
-    }, [pageIndex, pageSize, sortBy, sortOrder])
+    }, [pageIndex, pageSize, sortBy, sortOrder, filter])
 
     const columns = React.useMemo(() => [
         {
@@ -143,26 +150,41 @@ const AccountsTable: React.FC<IProps> = (props) => {
     }
 
     return (
-        <ConditionalRender render={accountsData.length > 0}>
-            <Table
-                title="Accounts"
-                columns={columns}
-                data={accountsData}
-                exportConfig={exportConfig}
-
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                sortOrder={sortOrder}
-                setSortOrder={setSortOrder}
-            />
-            <Pagination
-                pageIndex={pageIndex}
-                setPageIndex={setPageIndex}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-                totalRecords={totalRecords}
-            />
-        </ConditionalRender>
+        <div className="table-container">
+            <h3 className="mb-3">Accounts</h3>
+            <div className="header-controls">
+                <GlobalFilter
+                    filter={filter}
+                    setFilter={setFilter}
+                />
+                <CSVLink 
+                    // data={csvData}
+                    data={accountsData} 
+                    filename={exportConfig.fileName} 
+                    headers={exportConfig.headers}
+                    className="export-btn btn btn-color"
+                >
+                    Export<FontAwesomeIcon className="ml-1" icon={ faFileExport } />
+                </CSVLink>
+            </div>
+            <ConditionalRender render={accountsData.length > 0}>
+                <Table
+                    columns={columns}
+                    data={accountsData}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    sortOrder={sortOrder}
+                    setSortOrder={setSortOrder}
+                />
+                <Pagination
+                    pageIndex={pageIndex}
+                    setPageIndex={setPageIndex}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                    totalRecords={totalRecords}
+                />
+            </ConditionalRender>
+        </div>
     )
 }
 

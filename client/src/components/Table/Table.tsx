@@ -1,33 +1,30 @@
 import { 
-    faFileExport, 
     faSortAmountDown, 
     faSortAmountUp
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
-import { useFilters, useGlobalFilter, useTable, Column, Row } from "react-table"
+import { useFilters, useGlobalFilter, useTable, Column } from "react-table"
 import GlobalFilter from "./GlobalFilter"
-import { CSVLink } from "react-csv"
+// import { CSVLink } from "react-csv"
 import { useMediaQuery } from "react-responsive"
 
 export interface IDataRecord {
     [key: string]: string | number | null
 }
 
-interface IExportConfig {
-    fileName: string
-    headers: {
-        key: string,
-        label: string
-    }[]
-    dataFormattingCallback: (rows: Row<{}>[]) => IDataRecord[]
-}
+// interface IExportConfig {
+//     fileName: string
+//     headers: {
+//         key: string,
+//         label: string
+//     }[]
+//     dataFormattingCallback: (rows: Row<{}>[]) => IDataRecord[]
+// }
 
 interface IProps {
     columns: Column[]
     data: any
-    title: string
-    exportConfig: IExportConfig
 
     sortBy?: string
     setSortBy: (value: string) => void
@@ -50,11 +47,11 @@ const Table: React.FC<IProps> = (props) => {
         headerGroups,
         prepareRow,
         rows,
-        state,
+        // state,
 
         // filtering
-        preGlobalFilteredRows,
-        setGlobalFilter,
+        // preGlobalFilteredRows,
+        // setGlobalFilter,
     } = useTable(
         {
             columns,
@@ -66,7 +63,7 @@ const Table: React.FC<IProps> = (props) => {
         useGlobalFilter
     )
 
-    const csvData = props.exportConfig.dataFormattingCallback(rows)
+    // const csvData = props.exportConfig.dataFormattingCallback(rows)
 
     const columnHeaderClickHandler = (columnId: string) => {
         // same column clicked
@@ -85,23 +82,7 @@ const Table: React.FC<IProps> = (props) => {
     }
 
     return (
-        <div className="table-container">
-            <h3 className="mb-3">{ props.title }</h3>
-            <div className="header-controls">
-                <GlobalFilter
-                    preGlobalFilteredRows={preGlobalFilteredRows}
-                    globalFilter={state.globalFilter}
-                    setGlobalFilter={setGlobalFilter}
-                />
-                <CSVLink 
-                    data={csvData} 
-                    filename={props.exportConfig.fileName} 
-                    headers={props.exportConfig.headers}
-                    className="export-btn btn btn-color"
-                >
-                    Export<FontAwesomeIcon className="ml-1" icon={ faFileExport } />
-                </CSVLink>
-            </div>
+        <div className="table">
             {
                 compact 
                     ? <div className="compact-table" { ...getTableBodyProps() }>

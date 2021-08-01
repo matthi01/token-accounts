@@ -41,8 +41,6 @@ type accountNew struct {
 func main() {
 	loadEnv()
 
-	fmt.Println(os.Getenv("SERVER_PORT"))
-
 	// open original accounts file
 	jsonFile, err := os.Open("./accounts.json")
 	if err != nil {
@@ -86,7 +84,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancelCtx := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancelCtx()
+
 	err = client.Connect(ctx)
 	if err != nil {
 		log.Fatal(err)
@@ -95,6 +95,9 @@ func main() {
 
 	lednDashboardDB := client.Database("ledn_dashboard")
 	accountsCollection := lednDashboardDB.Collection("accounts")
+
+	// drop accounts collection to avoid duplicate entires
+	accountsCollection.Drop(ctx)
 
 	// insert documents into the accounts collection
 	for _, account := range accounts {

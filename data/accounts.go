@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -21,6 +22,7 @@ type accountOriginal struct {
 	DOB        string `json:"dob"`
 	MFA        string `json:"mfa"`
 	Amount     int    `json:"amt"`
+	Created    string `json:"createdDate"`
 	ReferredBy string `json:"ReferredBy"`
 }
 
@@ -32,10 +34,15 @@ type accountNew struct {
 	DOB        string `bson:"dob"`
 	MFA        string `bson:"mfa"`
 	Amount     int    `bson:"amount"`
+	Created    string `bson:"createdDate"`
 	ReferredBy string `bson:"referredBy"`
 }
 
 func main() {
+	loadEnv()
+
+	fmt.Println(os.Getenv("SERVER_PORT"))
+
 	// open original accounts file
 	jsonFile, err := os.Open("./accounts.json")
 	if err != nil {
@@ -66,15 +73,16 @@ func main() {
 			account.MFA = ""
 		}
 		account.Amount = original.Amount
+		account.Created = original.Created
 		account.ReferredBy = original.ReferredBy
 		accounts = append(accounts, account)
 	}
 
 	// set up database connection
-	// todo: connectino url should probably come from env variable...
-	// shit... that would be a third env file, maybe keep this script with the server files to avoid
-	// configuration duplication
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017/ledn_dashboard"))
+	dbHost := os.Getenv("DB_HOST")
+	dbName := os.Getenv("DB_NAME")
+	dbConnectionString := fmt.Sprintf("%s/%s", dbHost, dbName)
+	client, err := mongo.NewClient(options.Client().ApplyURI(dbConnectionString))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -94,5 +102,12 @@ func main() {
 		if err != nil {
 			fmt.Println("Insert Error:", err)
 		}
+	}
+}
+
+func loadEnv() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file")
 	}
 }

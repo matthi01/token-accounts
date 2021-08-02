@@ -46,7 +46,7 @@ func main() {
 	loadEnv()
 
 	// open original accounts file
-	jsonFile, err := os.Open("./accounts.json")
+	jsonFile, err := os.Open("./data/accounts.json")
 	if err != nil {
 		fmt.Println(err)
 	}

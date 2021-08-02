@@ -129,6 +129,20 @@
     }
 }
 
+.no-results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include boxShadow;
+    width: 50%;
+    height: 7rem;
+    font-size: 1.6rem;
+    color: $grey;
+    text-transform: uppercase;
+    border-radius: 5px;
+    margin: 5rem auto;
+}
+
 // 1200px
 @include largeScreen {
     .table-container {

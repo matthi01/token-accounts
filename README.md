@@ -2,6 +2,8 @@
 
 This project contains a display dashboard for a fictional Ledn token. It contains both a REST API server to host the data via a MongoDB database, a Golang script to clean up the provided json file and create and import the data into the database, and the client side react app.
 
+The project challenge document can be found [CodeChallenge.md](here).
+
 ## Features:
 
 - Responsiveness down to 375px

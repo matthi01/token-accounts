@@ -2,15 +2,12 @@ import moment from "moment"
 import React, { useState } from "react"
 import Table, { IDataRecord } from "../Table/Table"
 import { headerLabels } from "./constants"
-import { Row } from "react-table"
-import axios from "axios"
 import { useEffect } from "react"
-import ConditionalRender from "../ConditionalRender"
 import Pagination from "../Table/Pagination"
 import GlobalFilter from "../Table/GlobalFilter"
-import { CSVLink } from "react-csv"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFileExport } from "@fortawesome/free-solid-svg-icons"
+import CSVExportButton from "../CSVExportButton"
+import { fetchData } from "../../helpers/axios"
+import NoResults from "../Table/NoResults"
 
 export interface IAccountDataRecord extends IDataRecord {
     country: string
@@ -28,11 +25,6 @@ interface IProps {
     // data: IAccountDataRecord[]
 }
 
-const getAccounts = async (url: string) => {
-    const data = await axios.get(url)
-    return data
-}
-
 const AccountsTable: React.FC<IProps> = (props) => {
     const [accountsData, setAccountsData] = useState<IAccountDataRecord[]>([])
 
@@ -45,16 +37,19 @@ const AccountsTable: React.FC<IProps> = (props) => {
 
     const [filter, setFilter] = useState<string>("")
 
+    const [exportAPIQuery, setExportAPIQuery] = useState<string>("")
+
     useEffect(() => {
         const skip = pageIndex * pageSize
         const limit = pageSize
         const sort = sortBy ? `${sortBy}:${sortOrder}` : ""
         const query = `?skip=${skip}&limit=${limit}&sort=${sort}&filter=${filter}`
 
-        getAccounts(`${process.env.REACT_APP_API_HOST}/api/accounts${query}`)
+        fetchData(`${process.env.REACT_APP_API_HOST}/api/accounts${query}`)
             .then(res => {
                 setAccountsData(res.data.accounts)
                 setTotalRecords(res.data.totalRecords)
+                setExportAPIQuery(`${process.env.REACT_APP_API_HOST}/api/accounts?filter=${filter}`)
             })
             .catch(err => console.error("Error fetching accounts data:", err))
     }, [pageIndex, pageSize, sortBy, sortOrder, filter])
@@ -116,7 +111,8 @@ const AccountsTable: React.FC<IProps> = (props) => {
         }
     ], [])
 
-    const headers = [
+    const exportHeaders = [
+        { label: headerLabels["countryCode"], key: "countryCode" },
         { label: headerLabels["country"], key: "country" },
         { label: headerLabels["firstName"], key: "firstName" },
         { label: headerLabels["lastName"], key: "lastName" },
@@ -128,21 +124,6 @@ const AccountsTable: React.FC<IProps> = (props) => {
         { label: headerLabels["mfa"], key: "mfa" }
     ]
 
-    const accountDataFormatting = (rows: Row<{}>[]) => {
-        return rows.map(record => {
-            const row = record.original as IAccountDataRecord
-            row.dob = moment(row.dob).format("L")
-            row.createdDate = moment(row.createdDate).format("L")
-            return row
-        })
-    }
-
-    const exportConfig = {
-        fileName: "accounts.csv",
-        headers: headers,
-        dataFormattingCallback: accountDataFormatting
-    }
-
     return (
         <div className="table-container">
             <h3 className="mb-3">Accounts</h3>
@@ -151,33 +132,32 @@ const AccountsTable: React.FC<IProps> = (props) => {
                     filter={filter}
                     setFilter={setFilter}
                 />
-                <CSVLink 
-                    // data={csvData}
-                    data={accountsData} 
-                    filename={exportConfig.fileName} 
-                    headers={exportConfig.headers}
-                    className="export-btn btn btn-color"
-                >
-                    Export<FontAwesomeIcon className="ml-1" icon={ faFileExport } />
-                </CSVLink>
+                <CSVExportButton
+                    fileName="accounts.csv"
+                    headers={exportHeaders}
+                    apiQuery={exportAPIQuery}
+                    exportDataPath="accounts"
+                />
             </div>
-            <ConditionalRender render={accountsData.length > 0}>
-                <Table
-                    columns={columns}
-                    data={accountsData}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    sortOrder={sortOrder}
-                    setSortOrder={setSortOrder}
-                />
-                <Pagination
-                    pageIndex={pageIndex}
-                    setPageIndex={setPageIndex}
-                    pageSize={pageSize}
-                    setPageSize={setPageSize}
-                    totalRecords={totalRecords}
-                />
-            </ConditionalRender>
+            <Table
+                columns={columns}
+                data={accountsData}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+            />
+            {
+                accountsData.length > 0
+                    ?   <Pagination
+                            pageIndex={pageIndex}
+                            setPageIndex={setPageIndex}
+                            pageSize={pageSize}
+                            setPageSize={setPageSize}
+                            totalRecords={totalRecords}
+                        />
+                    : <NoResults />
+            }
         </div>
     )
 }

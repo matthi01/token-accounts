@@ -1,7 +1,6 @@
 import moment from "moment"
 import React, { useState } from "react"
 import Table, { IDataRecord } from "../Table/Table"
-import countryCodes from "../../assets/countryCodes/countryCodes.json"
 import { headerLabels } from "./constants"
 import { Row } from "react-table"
 import axios from "axios"
@@ -28,8 +27,6 @@ export interface IAccountDataRecord extends IDataRecord {
 interface IProps {
     // data: IAccountDataRecord[]
 }
-
-type CountryCode = keyof typeof countryCodes
 
 const getAccounts = async (url: string) => {
     const data = await axios.get(url)
@@ -69,10 +66,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
                 {
                     Header: headerLabels["country"],
                     id: "country",
-                    accessor: (row: IAccountDataRecord) => {
-                        const code = row.country as CountryCode
-                        return countryCodes[code] || code
-                    }
+                    accessor: "country"
                 },
                 {
                     Header: headerLabels["firstName"],

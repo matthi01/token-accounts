@@ -6,21 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
 import { useFilters, useGlobalFilter, useTable, Column } from "react-table"
 import GlobalFilter from "./GlobalFilter"
-// import { CSVLink } from "react-csv"
 import { useMediaQuery } from "react-responsive"
 
 export interface IDataRecord {
     [key: string]: string | number | null
 }
-
-// interface IExportConfig {
-//     fileName: string
-//     headers: {
-//         key: string,
-//         label: string
-//     }[]
-//     dataFormattingCallback: (rows: Row<{}>[]) => IDataRecord[]
-// }
 
 interface IProps {
     columns: Column[]
@@ -46,12 +36,7 @@ const Table: React.FC<IProps> = (props) => {
         getTableBodyProps,
         headerGroups,
         prepareRow,
-        rows,
-        // state,
-
-        // filtering
-        // preGlobalFilteredRows,
-        // setGlobalFilter,
+        rows
     } = useTable(
         {
             columns,
@@ -62,8 +47,6 @@ const Table: React.FC<IProps> = (props) => {
         useFilters,
         useGlobalFilter
     )
-
-    // const csvData = props.exportConfig.dataFormattingCallback(rows)
 
     const columnHeaderClickHandler = (columnId: string) => {
         // same column clicked

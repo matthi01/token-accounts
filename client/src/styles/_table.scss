@@ -87,46 +87,60 @@
             }
         }
     }
-    .pagination {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 2rem;
-        button {
-            background: $light;
-            color: $darkBlue;
-            border: none;
-            border-radius: 50%;
-            height: 3rem;
-            width: 3rem;
-            cursor: pointer;
-            &:disabled {
-                color: $grey;
-                cursor: initial;
-            }
-        }
-        .page-navigation {
-            width: 14rem;
-            display: flex;
-            justify-content: space-between;
-        }
-        .page-indicator {
-            color: $darkBlue;
-        }
-        .page-size-select {
-            background: $light;
-            color: $darkBlue;
-            border: none;
-            border-radius: 5px;
-            height: 3rem;
-            outline: none;
-            padding: 0 1.5rem;
-            width: 12rem;
-            margin-left: 2rem;
-            cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    button {
+        background: $light;
+        color: $darkBlue;
+        border: none;
+        border-radius: 50%;
+        height: 3rem;
+        width: 3rem;
+        cursor: pointer;
+        &:disabled {
+            color: $grey;
+            cursor: initial;
         }
     }
-    
+    .page-navigation {
+        width: 14rem;
+        display: flex;
+        justify-content: space-between;
+    }
+    .page-indicator {
+        color: $darkBlue;
+    }
+    .page-size-select {
+        background: $light;
+        color: $darkBlue;
+        border: none;
+        border-radius: 5px;
+        height: 3rem;
+        outline: none;
+        padding: 0 1.5rem;
+        width: 12rem;
+        margin-left: 2rem;
+        cursor: pointer;
+    }
+}
+
+.no-results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include boxShadow;
+    width: 50%;
+    height: 7rem;
+    font-size: 1.6rem;
+    color: $grey;
+    text-transform: uppercase;
+    border-radius: 5px;
+    margin: 5rem auto;
 }
 
 // 1200px

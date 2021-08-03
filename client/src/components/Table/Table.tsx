@@ -1,34 +1,26 @@
 import { 
-    faFileExport, 
     faSortAmountDown, 
     faSortAmountUp
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React, { useMemo } from "react"
-import { useFilters, useGlobalFilter, usePagination, useTable, useSortBy, Column, Row } from "react-table"
+import { useFilters, useGlobalFilter, useTable, Column } from "react-table"
 import GlobalFilter from "./GlobalFilter"
-import Pagination from "./Pagination"
-import { CSVLink } from "react-csv"
 import { useMediaQuery } from "react-responsive"
 
 export interface IDataRecord {
     [key: string]: string | number | null
 }
 
-interface IExportConfig {
-    fileName: string
-    headers: {
-        key: string,
-        label: string
-    }[]
-    dataFormattingCallback: (rows: Row<{}>[]) => IDataRecord[]
-}
-
 interface IProps {
     columns: Column[]
     data: any
-    title: string
-    exportConfig: IExportConfig
+
+    sortBy?: string
+    setSortBy: (value: string) => void
+
+    sortOrder?: string
+    setSortOrder: (value: string) => void
 }
 
 const Table: React.FC<IProps> = (props) => {
@@ -36,29 +28,15 @@ const Table: React.FC<IProps> = (props) => {
     const compact = useMediaQuery({ query: '(max-width: 960px)' })
     const defaultColumn = useMemo(() => ({ Filter: GlobalFilter }), [])
 
+    const isSortedDesc = props.sortOrder === "desc"
+
     const {
         // table
         getTableProps,
         getTableBodyProps,
         headerGroups,
         prepareRow,
-        rows,
-
-        // pagination
-        page,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        pageCount,
-        gotoPage,
-        nextPage,
-        previousPage,
-        setPageSize,
-        state,
-
-        // filtering
-        preGlobalFilteredRows,
-        setGlobalFilter,
+        rows
     } = useTable(
         {
             columns,
@@ -67,36 +45,32 @@ const Table: React.FC<IProps> = (props) => {
             defaultColumn
         },
         useFilters,
-        useGlobalFilter,
-        useSortBy,
-        usePagination
+        useGlobalFilter
     )
 
-    const csvData = props.exportConfig.dataFormattingCallback(rows)
+    const columnHeaderClickHandler = (columnId: string) => {
+        // same column clicked
+        // this would be perfect for a reducer
+        if (props.sortBy && props.sortBy === columnId) {
+            if (props.sortOrder === "desc") {
+                props.setSortBy("")
+                props.setSortOrder("")
+            } else {
+                props.setSortOrder("desc")
+            }
+        } else {
+            props.setSortBy(columnId)
+            props.setSortOrder("asc")
+        }
+    }
 
     return (
-        <div className="table-container">
-            <h3 className="mb-3">{ props.title }</h3>
-            <div className="header-controls">
-                <GlobalFilter
-                    preGlobalFilteredRows={preGlobalFilteredRows}
-                    globalFilter={state.globalFilter}
-                    setGlobalFilter={setGlobalFilter}
-                />
-                <CSVLink 
-                    data={csvData} 
-                    filename={props.exportConfig.fileName} 
-                    headers={props.exportConfig.headers}
-                    className="export-btn btn btn-color"
-                >
-                    Export<FontAwesomeIcon className="ml-1" icon={ faFileExport } />
-                </CSVLink>
-            </div>
+        <div className="table">
             {
                 compact 
                     ? <div className="compact-table" { ...getTableBodyProps() }>
                         {
-                            page.map((row, i) => {
+                            rows.map((row, i) => {
                                 prepareRow(row)
                                 return (
                                     <div className="tr" { ...row.getRowProps() }>
@@ -125,14 +99,15 @@ const Table: React.FC<IProps> = (props) => {
                             {headerGroups.map(headerGroup => (
                                 <tr { ...headerGroup.getHeaderGroupProps() }>
                                     { 
-                                        headerGroup.headers.map(column => (
-                                            column.Header 
-                                                ?   <th { ...column.getHeaderProps(column.getSortByToggleProps()) }>
+                                        headerGroup.headers.map(column => {
+                                            return (
+                                                column.Header 
+                                                ?   <th key={column.id} onClick={() => columnHeaderClickHandler(column.id)}>
                                                         { column.render("Header") }
                                                         <span>
                                                             {
-                                                                column.isSorted
-                                                                    ? column.isSortedDesc
+                                                                props.sortBy === column.id
+                                                                    ? isSortedDesc
                                                                         ? <FontAwesomeIcon className="ml-1" icon={faSortAmountDown} />
                                                                         : <FontAwesomeIcon className="ml-1" icon={faSortAmountUp} />
                                                                     : ""
@@ -140,14 +115,15 @@ const Table: React.FC<IProps> = (props) => {
                                                         </span>
                                                     </th>
                                                 :   null 
-                                        ))
+                                            )
+                                        })
                                     }
                                 </tr>
                             ))}
                         </thead>
                         <tbody { ...getTableBodyProps() }>
                             {
-                                page.map((row, i) => {
+                                rows.map((row, i) => {
                                     prepareRow(row)
                                     return (
                                         <tr { ...row.getRowProps() }>
@@ -163,19 +139,6 @@ const Table: React.FC<IProps> = (props) => {
                         </tbody>
                     </table>
             }
-            <Pagination
-                page={page}
-                canPreviousPage={canPreviousPage}
-                canNextPage={canNextPage}
-                pageOptions={pageOptions}
-                pageCount={pageCount}
-                gotoPage={gotoPage}
-                nextPage={nextPage}
-                previousPage={previousPage}
-                setPageSize={setPageSize}
-                pageIndex={state.pageIndex}
-                pageSize={state.pageSize}
-            />
         </div>
     )
 }

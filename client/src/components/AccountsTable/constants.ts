@@ -3,6 +3,7 @@ interface ILabels {
 }
 
 export const headerLabels: ILabels = {
+    countryCode: "Country Code",
     country: "Country",
     firstName: "First Name",
     lastName: "Last Name",

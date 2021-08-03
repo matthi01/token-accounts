@@ -1,12 +1,14 @@
 import moment from "moment"
 import React, { useState } from "react"
 import Table, { IDataRecord } from "../Table/Table"
-import countryCodes from "../../assets/countryCodes/countryCodes.json"
 import { headerLabels } from "./constants"
-import { Row } from "react-table"
-import axios from "axios"
 import { useEffect } from "react"
-import ConditionalRender from "../ConditionalRender"
+import Pagination from "../Table/Pagination"
+import GlobalFilter from "../Table/GlobalFilter"
+import CSVExportButton from "../CSVExportButton"
+import { fetchData } from "../../helpers/axios"
+import NoResults from "../Table/NoResults"
+import Spinner from "../Spinner"
 
 export interface IAccountDataRecord extends IDataRecord {
     country: string
@@ -24,23 +26,38 @@ interface IProps {
     // data: IAccountDataRecord[]
 }
 
-type CountryCode = keyof typeof countryCodes
-
-const getAccounts = async (url: string) => {
-    const data = await axios.get(url)
-    return data
-}
-
 const AccountsTable: React.FC<IProps> = (props) => {
-    const [accountsData, setAccountsData] = useState([])
+    const [accountsData, setAccountsData] = useState<IAccountDataRecord[]>([])
+    const [fetchingData, setFetchingData] = useState<boolean>(false)
+
+    const [pageIndex, setPageIndex] = useState<number>(0)
+    const [pageSize, setPageSize] = useState<number>(10)
+    const [totalRecords, setTotalRecords] = useState<number>(0)
+
+    const [sortBy, setSortBy] = useState<string>("")
+    const [sortOrder, setSortOrder] = useState<string>("")
+
+    const [filter, setFilter] = useState<string>("")
+
+    const [exportAPIQuery, setExportAPIQuery] = useState<string>("")
 
     useEffect(() => {
-        getAccounts(`${process.env.REACT_APP_API_HOST}/api/accounts`)
+        setFetchingData(true)
+
+        const skip = pageIndex * pageSize
+        const limit = pageSize
+        const sort = sortBy ? `${sortBy}:${sortOrder}` : ""
+        const query = `?skip=${skip}&limit=${limit}&sort=${sort}&filter=${filter}`
+
+        fetchData(`${process.env.REACT_APP_API_HOST}/api/accounts${query}`)
             .then(res => {
-                setAccountsData(res.data)
+                setAccountsData(res.data.accounts)
+                setTotalRecords(res.data.totalRecords)
+                setExportAPIQuery(`${process.env.REACT_APP_API_HOST}/api/accounts?filter=${filter}`)
             })
             .catch(err => console.error("Error fetching accounts data:", err))
-    }, [])
+            .finally(() => setFetchingData(false))
+    }, [pageIndex, pageSize, sortBy, sortOrder, filter])
 
     const columns = React.useMemo(() => [
         {
@@ -49,10 +66,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
                 {
                     Header: headerLabels["country"],
                     id: "country",
-                    accessor: (row: IAccountDataRecord) => {
-                        const code = row.country as CountryCode
-                        return countryCodes[code] || code
-                    }
+                    accessor: "country"
                 },
                 {
                     Header: headerLabels["firstName"],
@@ -102,7 +116,8 @@ const AccountsTable: React.FC<IProps> = (props) => {
         }
     ], [])
 
-    const headers = [
+    const exportHeaders = [
+        { label: headerLabels["countryCode"], key: "countryCode" },
         { label: headerLabels["country"], key: "country" },
         { label: headerLabels["firstName"], key: "firstName" },
         { label: headerLabels["lastName"], key: "lastName" },
@@ -114,25 +129,44 @@ const AccountsTable: React.FC<IProps> = (props) => {
         { label: headerLabels["mfa"], key: "mfa" }
     ]
 
-    const accountDataFormatting = (rows: Row<{}>[]) => {
-        return rows.map(record => {
-            const row = record.original as IAccountDataRecord
-            row.dob = moment(row.dob).format("L")
-            row.createdDate = moment(row.createdDate).format("L")
-            return row
-        })
-    }
-
-    const exportConfig = {
-        fileName: "accounts.csv",
-        headers: headers,
-        dataFormattingCallback: accountDataFormatting
-    }
-
     return (
-        <ConditionalRender render={accountsData.length > 0}>
-            <Table title="Accounts" columns={columns} data={accountsData} exportConfig={exportConfig}/>
-        </ConditionalRender>
+        <div className="table-container">
+            <h3 className="mb-3">Accounts</h3>
+            <div className="header-controls">
+                <GlobalFilter
+                    filter={filter}
+                    setFilter={setFilter}
+                />
+                <CSVExportButton
+                    fileName="accounts.csv"
+                    headers={exportHeaders}
+                    apiQuery={exportAPIQuery}
+                    exportDataPath="accounts"
+                />
+            </div>
+            <Table
+                columns={columns}
+                data={accountsData}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+            />
+            {
+                fetchingData
+                    ? <Spinner type="dark" />
+                    : accountsData.length > 0
+                        ?   <Pagination
+                                pageIndex={pageIndex}
+                                setPageIndex={setPageIndex}
+                                pageSize={pageSize}
+                                setPageSize={setPageSize}
+                                totalRecords={totalRecords}
+                            />
+                        : <NoResults />
+                
+            }
+        </div>
     )
 }
 

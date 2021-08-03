@@ -1,22 +1,33 @@
+import React from "react"
+import { useEffect } from "react"
 import { useState } from "react"
-import { useAsyncDebounce, UseGlobalFiltersInstanceProps, UseGlobalFiltersState } from "react-table"
 
-interface IGlobalFilterProps extends Partial<UseGlobalFiltersInstanceProps<any>>, UseGlobalFiltersState<any> {}
+interface IGlobalFilterProps {
+    filter: string
+    setFilter: (value: string) => void
+}
 
-const GlobalFilter: React.FC<IGlobalFilterProps> = ({ globalFilter, setGlobalFilter }) => {
-    const [value, setValue] = useState(globalFilter)
-    const onChange = useAsyncDebounce(value => {
-        setGlobalFilter && setGlobalFilter(value || undefined)
-    }, 200)
+const GlobalFilter: React.FC<IGlobalFilterProps> = (props) => {
+    const { filter, setFilter } = props
+    const [filterText, setFilterText] = useState<string>(filter)
+
+    const onChangeHandler = (e: any) => {
+        setFilterText(e.target.value)
+    }
+
+    // throttle the number of filtering requests
+    useEffect(() => {
+        const typingTimeout = setTimeout(() => {
+            setFilter(filterText)
+        }, 500)
+        return () => clearTimeout(typingTimeout)
+    }, [setFilter, filterText])
 
     return (
         <div className="search">
             <input
-                value={value || ""}
-                onChange={e => {
-                    setValue(e.target.value);
-                    onChange(e.target.value);
-                }}
+                value={filterText || ""}
+                onChange={onChangeHandler}
                 placeholder={`Search...`}
             />
         </div>

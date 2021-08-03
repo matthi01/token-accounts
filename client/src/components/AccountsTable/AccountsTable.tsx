@@ -8,6 +8,7 @@ import GlobalFilter from "../Table/GlobalFilter"
 import CSVExportButton from "../CSVExportButton"
 import { fetchData } from "../../helpers/axios"
 import NoResults from "../Table/NoResults"
+import Spinner from "../Spinner"
 
 export interface IAccountDataRecord extends IDataRecord {
     country: string
@@ -27,6 +28,7 @@ interface IProps {
 
 const AccountsTable: React.FC<IProps> = (props) => {
     const [accountsData, setAccountsData] = useState<IAccountDataRecord[]>([])
+    const [fetchingData, setFetchingData] = useState<boolean>(false)
 
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [pageSize, setPageSize] = useState<number>(10)
@@ -40,6 +42,8 @@ const AccountsTable: React.FC<IProps> = (props) => {
     const [exportAPIQuery, setExportAPIQuery] = useState<string>("")
 
     useEffect(() => {
+        setFetchingData(true)
+
         const skip = pageIndex * pageSize
         const limit = pageSize
         const sort = sortBy ? `${sortBy}:${sortOrder}` : ""
@@ -52,6 +56,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
                 setExportAPIQuery(`${process.env.REACT_APP_API_HOST}/api/accounts?filter=${filter}`)
             })
             .catch(err => console.error("Error fetching accounts data:", err))
+            .finally(() => setFetchingData(false))
     }, [pageIndex, pageSize, sortBy, sortOrder, filter])
 
     const columns = React.useMemo(() => [
@@ -148,15 +153,18 @@ const AccountsTable: React.FC<IProps> = (props) => {
                 setSortOrder={setSortOrder}
             />
             {
-                accountsData.length > 0
-                    ?   <Pagination
-                            pageIndex={pageIndex}
-                            setPageIndex={setPageIndex}
-                            pageSize={pageSize}
-                            setPageSize={setPageSize}
-                            totalRecords={totalRecords}
-                        />
-                    : <NoResults />
+                fetchingData
+                    ? <Spinner type="dark" />
+                    : accountsData.length > 0
+                        ?   <Pagination
+                                pageIndex={pageIndex}
+                                setPageIndex={setPageIndex}
+                                pageSize={pageSize}
+                                setPageSize={setPageSize}
+                                totalRecords={totalRecords}
+                            />
+                        : <NoResults />
+                
             }
         </div>
     )

@@ -1,8 +1,10 @@
 # Ledn Token Dashboard
 
-This project contains a display dashboard for a fictional Ledn token. It contains both a REST API server to host the data via a MongoDB database, a Golang script to clean up the provided json file and create and import the data into the database, and the client side react app.
+This project contains a display dashboard for a fictional Ledn token. It contains both a REST API server to host the data via a MongoDB database, a Golang loader script to clean up the provided json file and create and import the data into the database, and the client side react app.
 
-The project challenge document can be found [CodeChallenge.md](here).
+The project challenge document can be found [here](CodeChallenge.md).
+
+The original provided json data file can be found [here](./loader/resources/data/accounts.json).
 
 ## Features:
 
@@ -13,11 +15,13 @@ The project challenge document can be found [CodeChallenge.md](here).
 - Table Sorting
 - MongoDB database storage
 - Supports server side pagination, sorting, and filtering
+- Client side testing with Jest and Enzyme
 
 ### Tech:
 
 - React
 - Typescript
+- Jest / Enzyme
 - Node
 - MongoDB
 - Go
@@ -26,11 +30,11 @@ The project challenge document can be found [CodeChallenge.md](here).
 
 ### Set up .env files
 
-An .env.example file has been provided for both Client and Server. Create a .env file in the same directory as the .env.example file. Copy the contents of .env.example into .env. Do this for both Client and Server directories.
+An .env.example file has been provided for both Client and Server. Create a .env file in the same directory as the .env.example file. Copy the contents of .env.example into .env. Do this for both Client and Server directories. You can find the README for the client project [here](./client/README.md), and the README for the serber project [here](./server/README.md).
 
 You can run this project with 2 different approaches:
 1. Running the Client and Server independently. For this apprach please check the README files for both the Client and Server and follow their instructions. Disregard the instructions below.
-2. Running the app through the parent project (here). Follow the instructions below from the current directory.
+2. Running the app through the parent project (at the directory of this README). Follow the instructions below from the current directory.
 
 ### `npm install`
 

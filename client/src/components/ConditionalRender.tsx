@@ -1,14 +1,14 @@
 import React from "react"
 
 interface IProps {
-    render: boolean
+    show: boolean
 }
 
 const ConditionalRender: React.FC<IProps> = (props) => {
     return (
         <>
             {
-                props.render ? props.children : null
+                props.show ? props.children : null
             }
         </>
     )

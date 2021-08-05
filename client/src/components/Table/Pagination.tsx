@@ -31,23 +31,23 @@ const Pagination: React.FC<IPaginationProps> = (props) => {
     return (
         <div className="pagination">
             <div className="page-navigation">
-                <button onClick={() => goToPage(0)} disabled={!canPreviousPage}>
+                <button id="pagination-btn-first" onClick={() => goToPage(0)} disabled={!canPreviousPage}>
                     <FontAwesomeIcon icon={faFastBackward} />
                 </button>{" "}
-                <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                <button id="pagination-btn-previous" onClick={() => previousPage()} disabled={!canPreviousPage}>
                     <FontAwesomeIcon icon={faStepBackward} />
                 </button>{" "}
-                <button onClick={() => nextPage()} disabled={!canNextPage}>
+                <button id="pagination-btn-next" onClick={() => nextPage()} disabled={!canNextPage}>
                     <FontAwesomeIcon icon={faStepForward} />
                 </button>{" "}
-                <button onClick={() => goToPage(lastPageIndex)} disabled={!canNextPage}>
+                <button id="pagination-btn-last" onClick={() => goToPage(lastPageIndex)} disabled={!canNextPage}>
                     <FontAwesomeIcon icon={faFastForward} />
                 </button>
             </div>
             <span className="page-indicator">
                 <strong>
                     {props.pageIndex + 1} of { totalPages }
-                </strong>{" "}
+                </strong>
             </span>
             <select
                 className="page-size-select"

@@ -102,7 +102,7 @@ const Table: React.FC<IProps> = (props) => {
                                         headerGroup.headers.map(column => {
                                             return (
                                                 column.Header 
-                                                ?   <th key={column.id} onClick={() => columnHeaderClickHandler(column.id)}>
+                                                ?   <th key={column.id} id={column.id} onClick={() => columnHeaderClickHandler(column.id)}>
                                                         { column.render("Header") }
                                                         <span>
                                                             {

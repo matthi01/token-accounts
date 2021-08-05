@@ -7,13 +7,17 @@ This project sets up a display dashboard for a fictional Ledn token.
 - Responsiveness down to 375px
 - Responsive table design
 - Selection export to CSV
-- Table filtering
-- Table Sorting
+- Server side table pagination
+- Server side table filtering
+- Server side table sorting
+- Testing using Jest and Enzyme
 
 ### Tech:
 
 - React
 - Typescript
+- Jest
+- Enzyme
 - react-table v7
 
 

@@ -42,8 +42,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
     const [exportAPIQuery, setExportAPIQuery] = useState<string>("")
 
     useEffect(() => {
-        setFetchingData(true)
-
+        // setFetchingData(true)
         const skip = pageIndex * pageSize
         const limit = pageSize
         const sort = sortBy ? `${sortBy}:${sortOrder}` : ""

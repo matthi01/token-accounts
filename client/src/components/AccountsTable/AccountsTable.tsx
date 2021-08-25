@@ -58,6 +58,10 @@ const AccountsTable: React.FC<IProps> = (props) => {
             .finally(() => setFetchingData(false))
     }, [pageIndex, pageSize, sortBy, sortOrder, filter])
 
+    useEffect(() => {
+        setPageIndex(0)
+    }, [filter])
+
     const columns = React.useMemo(() => [
         {
             id: "accounts",

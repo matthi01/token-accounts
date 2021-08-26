@@ -133,7 +133,7 @@ const AccountsTable: React.FC<IProps> = (props) => {
     ]
 
     return (
-        <div className="table-container">
+        <div id="accounts" className="table-container">
             <h3 className="mb-3">Accounts</h3>
             <div className="header-controls">
                 <GlobalFilter

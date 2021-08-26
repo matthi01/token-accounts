@@ -26,9 +26,9 @@ header {
 }
 
 .banner {
-    background: rgb(22, 102, 142);
+    background-color: #000;
     width: 100%;
-    height: 66rem;
+    height: 51rem;
     margin-top: -9.5rem;
     position: relative;
     z-index: 0;
@@ -36,7 +36,6 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    @include desktopClipPath;
     &:after {
         content: "";
         background-image: url(../assets/images/ledn_background.jpeg);
@@ -45,10 +44,10 @@ header {
         background-size: cover;
         width: 100%;
         position: absolute;
-        background-color: $light;
+        background-color: #000000;
         z-index: -1;
-        opacity: 0.8;
-        height: 80rem;
+        opacity: 0.5;
+        height: 61rem;
         top: -10rem;
     }
     .title {
@@ -56,22 +55,38 @@ header {
     }
     .description {
         color: $light;
-        font-weight: 600;
+        font-weight: 500;
+    }
+    .action-buttons {
+        margin-top: 4rem;
+        .btn-transparent {
+            &:hover {
+                color: $orange;
+                border-color: $orange;
+                background: transparent;
+            }
+        }
     }
 }
 
 // buttons
 .btn {
-    border-radius: 2.5rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-    padding: .85rem 3.5rem;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    font-weight: 400;
+    padding: 1.2rem 2.4rem;
     cursor: pointer;
     text-decoration: none;
+    transition: all 0.3s ease 0s;
 }
 .btn-white {
     background: $light;
     color: $darkBlue;
+    &:hover {
+        background: $orange;
+        color: $light;
+    }
 }
 .btn-color {
     background: $orange;
@@ -81,8 +96,12 @@ header {
     background: transparent;
     border: 1px solid $light;
     color: $light;
-    font-weight: 500;
-    font-size: 1.3rem;
+    // font-weight: 500;
+    // font-size: 1.3rem;
+    &:hover {
+        background: $light;
+        color: $darkBlue;
+    }
 }
 
 .info-block {
@@ -183,7 +202,6 @@ header {
 // 700px
 @include smallScreen {
     .banner {
-        @include mobileClipPath;
         .title {
             font-size: 3.2rem;
         }

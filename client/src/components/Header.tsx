@@ -2,6 +2,8 @@ import React from "react"
 import LinkButton from "./LinkButton"
 import LednLogo from "./images/LednLogo"
 import Banner from "./Banner"
+import { useMediaQuery } from "react-responsive"
+import ConditionalRender from "./ConditionalRender"
 
 interface IProps {
     includeBanner?: boolean
@@ -10,6 +12,7 @@ interface IProps {
 }
 
 const Header: React.FC<IProps> = (props) => {
+    const mobile = useMediaQuery({maxWidth: "480px"})
     return (
         <>
             <header>
@@ -22,15 +25,17 @@ const Header: React.FC<IProps> = (props) => {
                         <LednLogo />
                     </LinkButton>
                     <div>
+                        <ConditionalRender show={!mobile}>
+                            <LinkButton
+                                text="Login"
+                                type="transparent"
+                                href="https://platform.ledn.io/"
+                                openNewTab
+                                className="mr-2"
+                            />
+                        </ConditionalRender>
                         <LinkButton
-                            text="Login"
-                            type="transparent"
-                            href="https://platform.ledn.io/"
-                            openNewTab
-                            className="mr-2"
-                        />
-                        <LinkButton
-                            text="Join"
+                            text="Join Now"
                             type="white"
                             href="https://platform.ledn.io/signup"
                             openNewTab
